@@ -88,6 +88,7 @@ const io = new Server(server, {
     origin: [
       "http://localhost:5173", // local vite
       "http://localhost:8080", // if you used 8080 before
+      "https://sindhuura.com",
       "https://sindhuur-frontend-9gsqlcz65-kella-sankars-projects.vercel.app" // deployed frontend
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -2563,4 +2564,5 @@ const startServer = async () => {
 };
 
 startServer();
+
 
