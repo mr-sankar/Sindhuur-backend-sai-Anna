@@ -83,13 +83,26 @@ const upload = multer({
 const app = express();
 app.use(express.json());
 const server = http.createServer(app);
+const corsOptions = {
+  origin: [
+    "https://sindhuura.com",
+    "https://sindhuur-final.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:8080"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // include OPTIONS
+  credentials: true,
+};
+
+// For Express
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // very important for preflight
+
+// For Socket.IO
 const io = new Server(server, {
-  cors: {
-    origin: ["https://sindhuura.com", "https://sindhuur-final.vercel.app", "http://localhost:8080"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  },
+  cors: corsOptions,
 });
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -136,13 +149,13 @@ const photoUpload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }
 }).single('avatar');
 
-app.use(
-  cors({
-    origin: ["https://sindhuura.com", "https://sindhuur-final.vercel.app", "http://localhost:8080"],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: ["https://sindhuura.com", "https://sindhuur-final.vercel.app", "http://localhost:8080"],
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     credentials: true,
+//   })
+// );
 app.use("/api/auth", forgotRoutes);
 app.use("/api/payment", Razorpay);
 app.use("/api", events);
@@ -2561,6 +2574,7 @@ const startServer = async () => {
 };
 
 startServer();
+
 
 
 
