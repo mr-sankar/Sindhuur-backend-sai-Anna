@@ -2172,7 +2172,7 @@ app.post("/api/stories", storyUpload, async (req, res) => {
     // Determine image path
     let imagePath = null;
     if (req.file) {
-      imagePath = `/uploads/${req.file.filename}`;
+      imagePath = `/Uploads/stories/${req.file.filename}`;
     } else if (imageUrl && imageUrl.trim() !== "") {
       imagePath = imageUrl.trim();
     }
@@ -2207,13 +2207,35 @@ app.post("/api/stories", storyUpload, async (req, res) => {
 
 app.get("/api/stories", async (req, res) => {
   try {
+    const baseUrl = process.env.BASE_URL || "http://localhost:5000";
+
     const stories = await Story.find().sort({ createdAt: -1 });
-    res.status(200).json(stories);
+     // Transform stories to include full image URLs
+    const transformedStories = stories.map(story => ({
+      ...story.toObject(),
+      image: story.image.startsWith('http') ? story.image : `${baseUrl}${story.image}`
+    }));
+    res.status(200).json(transformedStories);
   } catch (error) {
     console.error("Error fetching stories:", error.message);
     res.status(500).json({ error: "Failed to fetch stories" });
   }
 });
+
+app.delete('/api/stories/:id', async (req, res) => {
+  try {
+    const story = await Story.findByIdAndDelete(req.params.id);
+    if (!story) {
+      return res.status(404).json({ error: 'Story not found' });
+    }
+    res.status(200).json({ message: 'Story deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting story:', error.message);
+    res.status(500).json({ error: 'Failed to delete story' });
+  }
+});
+
+
 
 
 
@@ -2564,5 +2586,6 @@ const startServer = async () => {
 };
 
 startServer();
+
 
 
