@@ -137,7 +137,7 @@ const photoUpload = multer({
 
 app.use(
   cors({
-    origin: ["https://sindhuura.com", "https://sindhuur-final.vercel.app/", "http://localhost:3000"],
+    origin: ["https://sindhuura.com", "https://sindhuur-final.vercel.app", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -2560,4 +2560,5 @@ const startServer = async () => {
 };
 
 startServer();
+
 
