@@ -85,11 +85,12 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: ["https://sindhuura.com", "https://sindhuur-final.vercel.app", "http://localhost:8080"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },
 });
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -137,7 +138,7 @@ const photoUpload = multer({
 
 app.use(
   cors({
-    origin: ["https://sindhuura.com", "https://sindhuur-final.vercel.app", "http://localhost:3000"],
+    origin: ["https://sindhuura.com", "https://sindhuur-final.vercel.app", "http://localhost:8080"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -2560,5 +2561,6 @@ const startServer = async () => {
 };
 
 startServer();
+
 
 
